@@ -3,8 +3,14 @@ require('dotenv').load();
 var Botkit = require('./lib/Botkit.js')
 var os = require('os');
 
+var mongo_config = {
+  mongo_uri: process.env.MONGO_URI
+};
+var mongo_storage = require('./lib/storage/mongo_storage.js')(mongo_config);
+
 var controller = Botkit.slackbot({
   debug: false,
+  storage: mongo_storage
 });
 
 var bot = controller.spawn(
