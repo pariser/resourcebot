@@ -1,4 +1,18 @@
-# [Botkit](http://howdy.ai/botkit) - Building Blocks for Building Bots
+# LearnUp's Very Own `@resourcebot` for Slack
+
+```
+Command                   Description
+--------------------------------------------------------------------------
+list                      List all resources
+list available            List all resources which are currently available
+add <name>                Add a resource with name <name>
+claim <name> [duration]   Claim resource with name <name>
+                          If [duration] is not applied, defaults to 1 hour.
+                          Example durations are: \"for 1 day\", \"until tonight\"
+release <name>            Release your claim on resource with name <name>
+```
+
+## [Botkit](http://howdy.ai/botkit) - Building Blocks for Building Bots
 
 Botkit designed to ease the process of designing and running useful, creative or
 just plain weird bots (and other types of applications) that live inside [Slack](http://slack.com)!
@@ -15,51 +29,47 @@ run from a central location, and be used by many teams at the same time.
 
 ## Installation
 
-Botkit is available via NPM.
-
 ```bash
-npm install --save botkit
-```
-
-You can also check out Botkit directly from Git.
-If you want to use the example code and included bots, it may be preferable to use Github over NPM.
-
-```bash
-git clone git@github.com:howdyai/botkit.git
+git clone git@github.com:GoLearnUp/resourcebot.git
 ```
 
 ## Getting Started
 
-1) Install Botkit
+1) Install Botkit by cloning this repository
 
-2) First make a bot integration inside of your Slack channel. Go here:
+2) If necessary, add a new bot. To do so, go to Slack:
 
-https://my.slack.com/services/new/bot
+[https://my.slack.com/services/new/bot](https://my.slack.com/services/new/bot)
 
 Enter a name for your bot.
+
 Make it something fun and friendly, but avoid a single task specific name.
+
 Bots can do lots! Let's not pigeonhole them.
 
-3) When you click "Add Bot Integration", you are taken to a page where you can add additional details about your bot, like an avatar, as well as customize its name & description.
+3) When you click "Add Bot Integration", you are taken to a page where you can
+add additional details about your bot, like an avatar, as well as customize its
+name & description.
 
 Copy the API token that Slack gives you. You'll need it.
 
-4) Run the example bot app, using the token you just copied:
-​
-```
-token=REPLACE_THIS_WITH_YOUR_TOKEN node bot.js
-```
-​
-5) Your bot should be online! Within Slack, send it a quick direct message to say hello. It should say hello back!
+4) Add a new file `.env` in the project root and add:
 
-Try:
-  * who are you?
-  * call me Bob
-  * shutdown
-​
+```
+SLACK_TOKEN=REPLACE_THIS_WITH_YOUR_TOKEN
+MONGO_URI=localhost/resourcebot
+```
+Run the bot app:
+
+```bash
+nodemon bot.js
+```
+
+5) Your bot should be online! Open a DM with your bot and send it a message.
+Try `help` or `list`.
 
 ### Things to note
-​
+
 Much like a vampire, a bot has to be invited into a channel. DO NOT WORRY bots are not vampires.
 
 Type: `/invite @<my bot>` to invite your bot into another channel.
