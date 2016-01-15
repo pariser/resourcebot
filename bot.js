@@ -1,33 +1,115 @@
 require('dotenv').load();
 
-var Botkit = require('./lib/Botkit.js')
-var os = require('os');
 var async = require('async');
 var _ = require('underscore');
+var sprintf = require("sprintf-js").sprintf;
 
-var mongo_config = {
-  mongo_uri: process.env.MONGO_URI
-};
-var mongo_storage = require('./lib/storage/mongo_storage.js')(mongo_config);
-
-var controller = Botkit.slackbot({
-  debug: false,
-  storage: mongo_storage
-});
-
-var bot = controller.spawn(
-  {
-    token:process.env.SLACK_TOKEN
-  }
-).startRTM();
-
-var communication_methods = [
+var LISTEN_ON = [
   'direct_message',
   'direct_mention',
   'mention'
 ];
 
-controller.hears('list( unclaimed| available)?( resources?)? ?([a-zA-Z]*)?', communication_methods, function(bot, message) {
+var Botkit = require('./lib/Botkit.js')
+var BotkitAPI = require('./lib/Slack_web_api.js');
+var BotkitMongoStorage = require('./lib/storage/mongo_storage.js');
+
+var mongo_config = {
+  mongo_uri: process.env.MONGO_URI
+};
+var slack_config = {
+  token: process.env.SLACK_TOKEN
+};
+
+var storage = BotkitMongoStorage(mongo_config);
+var ObjectId = storage.ObjectId;
+
+var controller = Botkit.slackbot({
+  debug: false,
+  storage: storage
+});
+
+var bot = controller.spawn(slack_config);
+var api = BotkitAPI(controller, slack_config);
+
+function ensureResourceExists(resourceName, cb) {
+  controller.storage.resources.findOne({
+    name: resourceName
+  }, function(err, resource) {
+    if (err) { // Error? Bail!
+      return cb(err);
+    };
+
+    if (resource) { // Resource already exists? Nothing to do here.
+      console.log('Found resource with name:', resourceName);
+      return cb();
+    }
+
+    var id = new ObjectId();
+    // Resource doesn't exist. Add it!
+    console.log('Adding resource with name:', resourceName, ", id:", id);
+    controller.storage.resources.save(resourceName, {
+      created_at: new Date()
+    }, cb);
+  });
+}
+
+function ensureResourcesExist(cb) {
+  async.each([ 'staging', 'beta', 'demo' ], function(resourceName, next) {
+    ensureResourceExists(resourceName, next);
+  }, cb);
+}
+
+(function bootApp() {
+  async.series([
+    ensureResourcesExist,
+    function(cb) {
+      bot.startRTM();
+      cb();
+    }
+  ], function(err) {
+    if (err) {
+      console.error('Failed booting app:', err);
+      process.exit(1);
+    }
+  });
+}());
+
+controller.hears('help', LISTEN_ON, function(bot, message) {
+  async.waterfall([
+    function(cb) {
+      bot.startPrivateConversation(message, cb);
+    },
+    function(convo, cb) {
+      var help = "";
+      help += "```";
+      help += "Command                   Description\n";
+      help += "--------------------------------------------------------------------------\n";
+      help += "list                      List all resources\n";
+      help += "list available            List all resources which are currently available\n";
+      help += "add <name>                Add a resource with name <name>\n";
+      help += "claim <name> [duration]   Claim resource with name <name>\n";
+      help += "                          If [duration] is not applied, defaults to 1 hour.\n";
+      help += "                          Example durations are: \"for 1 day\", \"until tonight\"\n";
+      help += "release <name>            Release your claim on resource with name <name>\n";
+      help += "```";
+
+      convo.say(help, cb);
+      convo.next();
+    },
+    function(convo, cb) {
+      convo.stop()
+      cb();
+    }
+  ], function(err) {
+    if (err) {
+      console.error("Unexpected error:", err);
+      return;
+    }
+  });
+});
+
+controller.hears('list( unclaimed| available)?( resources?)? ?([a-zA-Z]*)?', LISTEN_ON, function(bot, message) {
   var unclaimed = message.match[1];
   var resourceString = message.match[3];
 
@@ -73,9 +155,15 @@ controller.hears('list( unclaimed| available)?( resources?)? ?([a-zA-Z]*)?', com
         return;
       }
 
-      var resource_names = _.map(resources, function(resource) {
-        return resource.name
-      }).join("\n");
+      var resourceText = "";
+      _.each(resources, function(resource) {
+        var claimedByString = "";
+        if (resource.claim_until && resource.claim_until > new Date()) {
+          if (unclaimed) return;
+          claimedByString = sprintf("Claimed by @%s until %s", resource.username, resource.claim_until);
+        }
+        resourceText += sprintf("%-15s %20s\n", resource.name, claimedByString);
+      });
 
       var intro = "";
       if (unclaimed) {
@@ -84,25 +172,25 @@ controller.hears('list( unclaimed| available)?( resources?)? ?([a-zA-Z]*)?', com
         intro = "Resources:";
       }
 
-      bot.reply(message, intro + "```" + resource_names + "```", cb);
+      bot.reply(message, intro + "```" + resourceText + "```", cb);
     }
   ], function(err) {
     if (err) {
-      console.error("Caught error:", err);
-      bot.reply(message, "Caught error: " + err);
+      console.error("Unexpected error:", err);
+      return;
     }
   });
 });
 
-controller.hears(['add( resource)? ([a-zA-Z]+)'], communication_methods, function(bot, message) {
-  var name = message.match[2];
+controller.hears(['add( resource)? ([a-zA-Z]+)'], LISTEN_ON, function(bot, message) {
+  var resourceName = message.match[2];
 
   function ResourceAlreadyExistsError() {}
 
   async.waterfall([
     function(cb) {
       controller.storage.resources.findOne({
-        name: name
+        name: resourceName
       }, cb);
     },
     function(resource, cb) {
@@ -113,30 +201,28 @@ controller.hears(['add( resource)? ([a-zA-Z]+)'], communication_methods, functio
       cb();
     },
     function(cb) {
-      controller.storage.resources.save({
-        name: name,
+      controller.storage.resources.save(resourceName, {
         created_at: new Date(),
       }, cb);
     },
     function(resource, cb) {
-      bot.reply(message, "Great, I've added a resource named `" + name + "`", cb)
+      bot.reply(message, "Great, I've added a resource named `" + resourceName + "`", cb)
     }
   ], function(err) {
-    console.log('finished, err:', err);
     if (err && err instanceof ResourceAlreadyExistsError) {
-      bot.reply(message, "Sorry, it looks like there's an existing resource called `" + name + "`");
+      bot.reply(message, "Sorry, it looks like there's an existing resource called `" + resourceName + "`");
       return;
     };
 
     if (err) {
-      console.error("Caught error: ", err);
-      bot.reply(message, "Caught error: " + err);
+      console.error("Unexpected error:", err);
+      return;
     }
   });
 });
 
-controller.hears('release (claim (on )?)?([a-zA-Z]+)', communication_methods, function(bot, message) {
-  var name = message.match[3];
+controller.hears('release (claim (on )?)?([a-zA-Z]+)', LISTEN_ON, function(bot, message) {
+  var resourceName = message.match[3];
   var now = new Date();
 
   function ResourceDoesNotExist() {}
@@ -148,7 +234,7 @@ controller.hears('release (claim (on )?)?([a-zA-Z]+)', communication_methods, fu
   async.waterfall([
     function(cb) {
       controller.storage.resources.findOne({
-        name: name
+        name: resourceName
       }, cb);
     },
     function(resource, cb) {
@@ -164,8 +250,7 @@ controller.hears('release (claim (on )?)?([a-zA-Z]+)', communication_methods, fu
         return cb(new ResourceNotClaimedByMessageUser(resource.user));
       }
 
-      controller.storage.resources.save({
-        name: name,
+      controller.storage.resources.save(resourceName, {
         claim_until: null,
         user: null
       }, cb);
@@ -175,18 +260,25 @@ controller.hears('release (claim (on )?)?([a-zA-Z]+)', communication_methods, fu
     }
   ], function(err) {
     if (err && err instanceof ResourceDoesNotExist) {
-      bot.reply(message, "Couldn't find resource with name: `" + name + "`.");
+      bot.reply(message, "Couldn't find resource with name: `" + resourceName + "`.");
       return;
     }
 
     if (err && err instanceof ResourceNotClaimed) {
-      bot.reply(message, "Resource `" + name + "` is not currently claimed.");
+      bot.reply(message, "Resource `" + resourceName + "` is not currently claimed.");
       return;
     }
 
     if (err && err instanceof ResourceNotClaimedByMessageUser) {
-      bot.reply(message, "You do not have a claim on `" + name + "`. This resource is claimed by " + err.user + ".");
-      return;
+      return api.users.info({ user: err.user }, function(err, res) {
+        var otherUserName = "another user";
+
+        if (!err) {
+          otherUserName = '@' + res.user.name;
+        }
+
+        bot.reply(message, "You do not have a claim on `" + resourceName + "`. This resource is claimed by " + otherUserName + ".");
+      });
     }
 
     if (err) {
@@ -205,8 +297,9 @@ function advanceDateTo8AMOnWeekday(date, weekday) {
   }
 }
 
-controller.hears('claim (resource )?([a-zA-Z]+)( .+)?', communication_methods, function(bot, message) {
-  var name = message.match[2];
+controller.hears('claim (resource )?([a-zA-Z]+)( .+)?', LISTEN_ON, function(bot, message) {
+  var resourceName = message.match[2];
+  var resource;
   var length = message.match[3];
   var now = new Date();
   var claimUntil = null;
@@ -308,23 +401,33 @@ controller.hears('claim (resource )?([a-zA-Z]+)( .+)?', communication_methods, f
     },
     function(cb) {
       controller.storage.resources.findOne({
-        name: name
+        name: resourceName
       }, cb);
     },
-    function(resource, cb) {
+    function(_resource, cb) {
+      resource = _resource;
+      cb();
+    },
+    function(cb) {
       if (!resource) {
         return cb(new ResourceDoesNotExist());
       }
 
       if (resource.claim_until > now) {
-        return cb(new ResourceAlreadyClaimed(resource.user, resource.claim_until));
+        return cb(new ResourceAlreadyClaimed());
       }
 
-      controller.storage.resources.save({
-        name: name,
-        claim_until: claimUntil,
-        user: message.user
-      }, cb);
+      api.users.info({ user: message.user }, function(err, res) {
+        if (err) {
+          return cb(err);
+        }
+
+        controller.storage.resources.save(resourceName, {
+          claim_until: claimUntil,
+          user: message.user,
+          username: res.user.name
+        }, cb);
+      });
     },
     function(updatedResource, cb) {
       bot.reply(message, "Got it! You've claimed " + updatedResource.name + " until " + updatedResource.claim_until, cb);
@@ -351,17 +454,17 @@ controller.hears('claim (resource )?([a-zA-Z]+)( .+)?', communication_methods, f
     }
 
     if (err && err instanceof ResourceDoesNotExist) {
-      bot.reply(message, "Couldn't find resource with name: `" + name + "`.");
+      bot.reply(message, "Couldn't find resource with name: `" + resourceName + "`.");
       return;
     }
 
     if (err && err instanceof ResourceAlreadyClaimed) {
-      if (message.user === err.user) {
-        bot.reply(message, "You already have `" + name + "` claimed until " + err.claim_until + ".");;
+      if (message.user === resource.user) {
+        bot.reply(message, "You already have `" + resourceName + "` claimed until " + resource.claim_until + ".");;
         return;
       }
 
-      bot.reply(message, "Sorry - `" + name + "` is currently claimed by " + err.user + " until " + err.claim_until + ".");;
+      bot.reply(message, "Sorry - `" + resourceName + "` is currently claimed by @" + resource.username + " until " + resource.claim_until + ".");;
       return;
     }
 
