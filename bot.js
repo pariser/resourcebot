@@ -4,6 +4,9 @@ var async = require('async');
 var _ = require('underscore');
 var sprintf = require("sprintf-js").sprintf;
 
+var PACKAGE_INFORMATION = require('./package.json');
+var PACKAGE_VERSION = PACKAGE_INFORMATION.version;
+
 var LISTEN_ON = [
   'direct_message',
   'direct_mention',
@@ -81,7 +84,7 @@ controller.hears('help', LISTEN_ON, function(bot, message) {
       bot.startPrivateConversation(message, cb);
     },
     function(convo, cb) {
-      var help = "";
+      var help = "@resourcebot v" + PACKAGE_VERSION + ":";
       help += "```";
       help += "Command                   Description\n";
       help += "--------------------------------------------------------------------------\n";
