@@ -1,5 +1,7 @@
 require('dotenv').load();
 
+var SLACK_USERNAME = process.env.BOT_NAME || 'resourcebot';
+
 var async = require('async');
 var _ = require('underscore');
 var sprintf = require("sprintf-js").sprintf;
@@ -84,7 +86,7 @@ controller.hears('help', LISTEN_ON, function(bot, message) {
       bot.startPrivateConversation(message, cb);
     },
     function(convo, cb) {
-      var help = "@resourcebot v" + PACKAGE_VERSION + ":";
+      var help = "@"+SLACK_USERNAME+" v" + PACKAGE_VERSION + ":";
       help += "```";
       help += "Command                   Description\n";
       help += "--------------------------------------------------------------------------\n";
@@ -154,7 +156,7 @@ controller.hears('list( unclaimed| available)?( resources?)? ?([a-zA-Z]*)?', LIS
           return;
         }
 
-        bot.reply(message, "There are no resources yet. Add one now `@resourcebot add resource <resource_name>`", cb);
+        bot.reply(message, "There are no resources yet. Add one now `@"+SLACK_USERNAME+" add resource <resource_name>`", cb);
         return;
       }
 

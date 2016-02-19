@@ -4,17 +4,18 @@
   "description": "Slackbot for managing resource use",
   "main": "bot.js",
   "dependencies": {
-    "async": "^1.5.0",
-    "body-parser": "^1.14.2",
-    "dotenv": "^1.2.0",
-    "express": "^4.13.3",
+    "async": "^1.5.2",
+    "body-parser": "^1.15.0",
+    "dotenv": "^2.0.0",
+    "express": "^4.13.4",
     "jfs": "^0.2.6",
-    "monk": "^1.0.1",
+    "mongodb": "^2.1",
+    "monk": "github:ratson/monkii#mongoskin2",
     "mustache": "^2.2.1",
-    "request": "^2.67.0",
+    "request": "^2.69.0",
     "sprintf-js": "^1.0.3",
     "underscore": "^1.8.3",
-    "ws": "^0.8.1"
+    "ws": "^1.0.1"
   },
   "devDependencies": {
     "node-env-file": "^0.1.8",
