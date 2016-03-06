@@ -1,9 +1,8 @@
 var async = require('async');
 var _ = require('underscore');
-var sprintf = require("sprintf-js").sprintf;
+var sprintf = require('sprintf-js').sprintf;
 
-module.exports = function(app){
-
+module.exports = function(app) {
   app.command('list( unclaimed| available)?( resources?)? ?([a-zA-Z]*)?', function(bot, message) {
     var unclaimed = message.match[1];
     var resourceString = message.match[3];
@@ -15,7 +14,7 @@ module.exports = function(app){
         if (resourceString && resourceString.length > 0) {
           query.name = {
             '$regex': resourceString
-          }
+          };
         }
 
         if (unclaimed) {
@@ -27,8 +26,8 @@ module.exports = function(app){
               claimed_until: {
                 '$lt': new Date()
               }
-            },
-          ]
+            }
+          ];
         }
 
         app.storage.resources.find(query, cb);
@@ -37,41 +36,43 @@ module.exports = function(app){
         if (resources.length === 0) {
           if (resourceString && resourceString.length > 0) {
             if (unclaimed) {
-              bot.reply(message, "No unclaimed resources match `" + resourceString + "`.", cb);
+              bot.reply(message, 'No unclaimed resources match `' + resourceString + '`.', cb);
               return;
             }
 
-            bot.reply(message, "No resources match `" + resourceString + "`.", cb);
+            bot.reply(message, 'No resources match `' + resourceString + '`.', cb);
             // TODO: ask if the user would like to add it now?
             return;
           }
 
-          bot.reply(message, "There are no resources yet. Add one now `@"+app.slack_username+" add resource <resource_name>`", cb);
+          bot.reply(message, 'There are no resources yet. Add one now `@'+app.slack_username+' add resource <resource_name>`', cb);
           return;
         }
 
-        var resourceText = "";
+        var resourceText = '';
         _.each(resources, function(resource) {
-          var claimedByString = "";
+          var claimedByString = '';
           if (resource.claim_until && resource.claim_until > new Date()) {
-            if (unclaimed) return;
-            claimedByString = sprintf("Claimed by @%s until %s", resource.username, resource.claim_until);
+            if (unclaimed) {
+              return;
+            }
+            claimedByString = sprintf('Claimed by @%s until %s', resource.username, resource.claim_until);
           }
-          resourceText += sprintf("%-15s %20s\n", resource.name, claimedByString);
+          resourceText += sprintf('%-15s %20s\n', resource.name, claimedByString);
         });
 
-        var intro = "";
+        var intro = '';
         if (unclaimed) {
-          intro = "Unclaimed resources:";
+          intro = 'Unclaimed resources:';
         } else {
-          intro = "Resources:";
+          intro = 'Resources:';
         }
 
-        bot.reply(message, intro + "```" + resourceText + "```", cb);
+        bot.reply(message, intro + '```' + resourceText + '```', cb);
       }
     ], function(err) {
       if (err) {
-        console.error("Unexpected error:", err);
+        console.error('Unexpected error:', err);
         return;
       }
     });

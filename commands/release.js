@@ -1,7 +1,6 @@
 var async = require('async');
 
-module.exports = function(app){
-
+module.exports = function(app) {
   app.command('release (claim (on )?)?([a-zA-Z]+)', function(bot, message) {
     var resourceName = message.match[3];
     var now = new Date();
@@ -37,33 +36,33 @@ module.exports = function(app){
         }, cb);
       },
       function(updatedResource, cb) {
-        bot.reply(message, "Got it! You've released your claim on `" + updatedResource.name + "`.", cb);
+        bot.reply(message, 'Got it! You\'ve released your claim on `' + updatedResource.name + '`.', cb);
       }
     ], function(err) {
       if (err && err instanceof ResourceDoesNotExist) {
-        bot.reply(message, "Couldn't find resource with name: `" + resourceName + "`.");
+        bot.reply(message, 'Couldn\'t find resource with name: `' + resourceName + '`.');
         return;
       }
 
       if (err && err instanceof ResourceNotClaimed) {
-        bot.reply(message, "Resource `" + resourceName + "` is not currently claimed.");
+        bot.reply(message, 'Resource `' + resourceName + '` is not currently claimed.');
         return;
       }
 
       if (err && err instanceof ResourceNotClaimedByMessageUser) {
-        return app.api.users.info({ user: err.user }, function(err, res) {
-          var otherUserName = "another user";
+        return app.api.users.info({ user: err.user }, function(apiErr, res) {
+          var otherUserName = 'another user';
 
-          if (!err) {
+          if (!apiErr) {
             otherUserName = '@' + res.user.name;
           }
 
-          bot.reply(message, "You do not have a claim on `" + resourceName + "`. This resource is claimed by " + otherUserName + ".");
+          bot.reply(message, 'You do not have a claim on `' + resourceName + '`. This resource is claimed by ' + otherUserName + '.');
         });
       }
 
       if (err) {
-        console.error("Unexpected error:", err);
+        console.error('Unexpected error:', err);
         return;
       }
     });

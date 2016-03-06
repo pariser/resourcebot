@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+[[ -e node_modules ]] || npm install
+
+[[ -e node_modules/.bin/eslint ]] || npm install eslint
+
+node_modules/.bin/eslint --config .eslintrc bot.js commands/*.js
