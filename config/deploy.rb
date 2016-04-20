@@ -67,6 +67,8 @@ namespace :deploy do
       execute "cd #{deploy_to}/current/ && npm update"
     end
   end
+
+  task :restart => :restart_resourcebot
 end
 
 after :deploy, :restart_resourcebot do
