@@ -27,53 +27,76 @@ developers to build both custom integrations for their
 team, as well as public "Slack Button" applications that can be
 run from a central location, and be used by many teams at the same time.
 
-## Installation
+## Installation/Getting Started
 
-```bash
-git clone git@github.com:GoLearnUp/resourcebot.git
+1. Clone this repository
+
+  ```sh
+  git clone git@github.com:GoLearnUp/resourcebot.git
+  ```
+
+2. If necessary, add a new bot. To do so, go to Slack:
+
+  [https://my.slack.com/services/new/bot](https://my.slack.com/services/new/bot)
+
+  Enter a name for your bot.
+
+  Make it something fun and friendly, but avoid a single task specific name.
+
+  Bots can do lots! Let's not pigeonhole them.
+
+3. When you click "Add Bot Integration", you are taken to a page where you can add additional details about your bot, like an avatar, as well as customize its name & description.
+
+  Copy the API token that Slack gives you. You'll need it.
+
+4. Add a new file `.env` in the project root and add:
+
+  ```
+  SLACK_TOKEN=REPLACE_THIS_WITH_YOUR_TOKEN
+  MONGO_URI=localhost/resourcebot
+  ```
+  Run the bot app:
+
+  ```bash
+  nodemon bot.js
+  ```
+
+5. Your bot should be online! Open a DM with your bot and send it a message. Try `help` or `list`.
+
+6. NOTE:
+
+  Much like a vampire, a bot has to be invited into a channel. DO NOT WORRYbots are not vampires.
+
+  Type: `/invite @<my bot>` to invite your bot into another channel.
+
+## Deployment and Monitoring
+
+Capistrano has been configured to deploy `resourcebot` via git hooks from branch `master`. You should commit and push your changes to `master` before deploying.
+
+Configuration values for the production environment are stored in `./config/deploy/production.env` which is _not_ checked in to source control. This file is already on the server so you shouldn't need a copy, but ask @pariser for a copy for backup purposes.
+
+### Deployment
+
+```sh
+cap production deploy
 ```
 
-## Getting Started
+The `./bot.js` script which actually runs `resourcebot` will be launched and monitored by [`forever`](https://github.com/foreverjs/forever).
 
-1) Install Botkit by cloning this repository
+Other useful cap tasks are:
 
-2) If necessary, add a new bot. To do so, go to Slack:
+* `resourcebot:start`
+* `resourcebot:stop`
+* `resourcebot:restart`
+* `resourcebot:status`
+* `logs:tail`
 
-[https://my.slack.com/services/new/bot](https://my.slack.com/services/new/bot)
+The `forever` daemon process actually captures and routes the server logs. To find the log location from the server you can type `forever logs`.
 
-Enter a name for your bot.
 
-Make it something fun and friendly, but avoid a single task specific name.
+<hr>
 
-Bots can do lots! Let's not pigeonhole them.
-
-3) When you click "Add Bot Integration", you are taken to a page where you can
-add additional details about your bot, like an avatar, as well as customize its
-name & description.
-
-Copy the API token that Slack gives you. You'll need it.
-
-4) Add a new file `.env` in the project root and add:
-
-```
-SLACK_TOKEN=REPLACE_THIS_WITH_YOUR_TOKEN
-MONGO_URI=localhost/resourcebot
-```
-Run the bot app:
-
-```bash
-nodemon bot.js
-```
-
-5) Your bot should be online! Open a DM with your bot and send it a message.
-Try `help` or `list`.
-
-### Things to note
-
-Much like a vampire, a bot has to be invited into a channel. DO NOT WORRY bots are not vampires.
-
-Type: `/invite @<my bot>` to invite your bot into another channel.
-
+# API Documentation from Botkit
 
 ## Core Concepts
 
