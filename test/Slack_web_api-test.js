@@ -1,5 +1,5 @@
 var test = require('tape')
-var Botkit = require('../')
+var Botkit = require('../lib/botkit');
 var env = require('node-env-file')
 var path = require('path')
 
@@ -18,7 +18,8 @@ test('sanity', function (t) {
 
 test('can start and then stop a bot', function (t) {
 
-  var controller = Botkit.slackbot({debug:false})
+  var controller = Botkit.slackbot({debug:false});
+
   t.plan(3);
 
   controller.on('rtm_open',function(bot) {
