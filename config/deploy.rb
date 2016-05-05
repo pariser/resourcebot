@@ -58,13 +58,13 @@ end
 namespace :deploy do
   task :npm_install do
     on roles(:app), except: { no_release: true } do
-      execute "cd #{deploy_to}/current/ && npm install"
+      execute "cd #{current_path} && npm install"
     end
   end
 
   task :npm_update do
     on roles(:app), except: { no_release: true } do
-      execute "cd #{deploy_to}/current/ && npm update"
+      execute "cd #{current_path} && npm update"
     end
   end
 
@@ -80,8 +80,8 @@ end
 namespace :resourcebot do
   task :start do
     on roles(:app), except: { no_release: true } do
-      # execute "cd #{deploy_to}/current/ && node_modules/.bin/forever start #{fetch(:main_js_binary)}"
-      execute "forever start --uid resourcebot --append --minUptime 1000 --spinSleepTime 1000 --workingDir #{deploy_to}/current/ #{deploy_to}/current/#{fetch(:main_js_binary)}"
+      # execute "cd #{current_path} && node_modules/.bin/forever start #{fetch(:main_js_binary)}"
+      execute "forever start --uid resourcebot --append --minUptime 1000 --spinSleepTime 1000 --workingDir #{current_path} #{current_path}/#{fetch(:main_js_binary)}"
     end
   end
 
@@ -112,7 +112,7 @@ end
 namespace :logs do
   task :tail do
     on roles(:app) do
-      resp = capture "cd #{deploy_to}/current/ && node_modules/.bin/forever logs | grep #{fetch(:main_js_binary)}"
+      resp = capture "cd #{current_path} && node_modules/.bin/forever logs | grep #{fetch(:main_js_binary)}"
       log = resp.split(" ").last
       log.gsub!("\e[35m", "")
       log.gsub!("\e[39m", "")
