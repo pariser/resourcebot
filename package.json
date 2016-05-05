@@ -10,7 +10,7 @@
     "express": "^4.13.4",
     "jfs": "^0.2.6",
     "mongodb": "^2.1",
-    "monk": "github:ratson/monkii#mongoskin2",
+    "monkii": "^1.2.0",
     "mustache": "^2.2.1",
     "request": "^2.69.0",
     "sprintf-js": "^1.0.3",
