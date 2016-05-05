@@ -4,6 +4,7 @@ var async = require('async');
 var botkit = require('./lib/Botkit.js');
 var botkitAPI = require('./lib/Slack_web_api.js');
 var botkitMongoStorage = require('./lib/storage/mongo_storage.js');
+var logger = require('./lib/logger');
 
 var SLACK_USERNAME = process.env.BOT_NAME || 'resourcebot';
 var PACKAGE_INFORMATION = require('./package.json');
@@ -28,7 +29,8 @@ var ObjectId = storage.ObjectId;
 
 var controller = botkit.slackbot({
   debug: false,
-  storage: storage
+  storage: storage,
+  logger: logger
 });
 
 var bot = controller.spawn(slackConfig);
@@ -62,13 +64,13 @@ var app = {
       }
 
       if (resource) { // Resource already exists? Nothing to do here.
-        console.log('Found resource with name:', resourceName);
+        logger.info('Found resource with name:', resourceName);
         return cb();
       }
 
       var id = new ObjectId();
       // Resource doesn't exist. Add it!
-      console.log('Adding resource with name:', resourceName, ', id:', id);
+      logger.info('Adding resource with name:', resourceName, ', id:', id);
       controller.storage.resources.save(resourceName, {
         created_at: new Date()
       }, cb);
