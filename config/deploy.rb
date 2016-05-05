@@ -116,7 +116,7 @@ namespace :logs do
       log = resp.split(" ").last
       log.gsub!("\e[35m", "")
       log.gsub!("\e[39m", "")
-      execute "tail -f #{log}"
+      execute "tail -f #{log} | #{current_path}/node_modules/.bin/bunyan"
     end
   end
 end
