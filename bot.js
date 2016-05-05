@@ -102,3 +102,34 @@ require('./commands/list')(app);
 require('./commands/add')(app);
 require('./commands/claim')(app);
 require('./commands/release')(app);
+
+// exit handling
+var exitHandler = function(options, err) {
+  if (options.cleanup) {
+    logger.info('in exitHandler(), process.exit()');
+  }
+
+  if (err) {
+    logger.error(err.stack);
+  }
+
+  if (options.exit) {
+    logger.info("Process exiting");
+    process.exit();
+  }
+};
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null, {
+  cleanup: true
+}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {
+  exit: true
+}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {
+  exit:true
+}));
