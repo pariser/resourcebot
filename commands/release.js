@@ -1,8 +1,8 @@
 var async = require('async');
 
 module.exports = function(app) {
-  app.command('release (claim (on )?)?([a-zA-Z]+)', function(bot, message) {
-    var resourceName = message.match[3];
+  app.command('^(release|unclaim) (claim (on )?)?([a-zA-Z]+)', function(bot, message) {
+    var resourceName = message.match[4];
     var now = new Date();
 
     function ResourceDoesNotExist() {}

@@ -18,6 +18,7 @@ module.exports = function(app) {
         help += '                          If [duration] is not applied, defaults to 1 hour.\n';
         help += '                          Example durations are: "for 1 day", "until tonight"\n';
         help += 'release <name>            Release your claim on resource with name <name>\n';
+        help += 'unclaim <name>            \n';
         help += '```';
 
         convo.say(help, cb);
