@@ -3,7 +3,7 @@ var _ = require('underscore');
 var sprintf = require('sprintf-js').sprintf;
 
 module.exports = function(app) {
-  app.command('list( unclaimed| available)?( resources?)? ?([a-zA-Z]*)?', function(bot, message) {
+  app.command('list( unclaimed| available)?( resources?)? ?([a-zA-Z\-]*)?', function(bot, message) {
     var unclaimed = message.match[1];
     var resourceString = message.match[3];
 
