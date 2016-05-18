@@ -100,6 +100,7 @@ var app = {
 require('./commands/help')(app);
 require('./commands/list')(app);
 require('./commands/add')(app);
+require('./commands/remove')(app);
 require('./commands/claim')(app);
 require('./commands/release')(app);
 

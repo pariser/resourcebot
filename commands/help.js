@@ -14,6 +14,7 @@ module.exports = function(app) {
         help += 'list                      List all resources\n';
         help += 'list available            List all resources which are currently available\n';
         help += 'add <name>                Add a resource with name <name>\n';
+        help += 'remove <name>             Remove the resource with name <name>\n';
         help += 'claim <name> [duration]   Claim resource with name <name>\n';
         help += '                          If [duration] is not applied, defaults to 1 hour.\n';
         help += '                          Example durations are: "for 1 day", "until tonight"\n';
