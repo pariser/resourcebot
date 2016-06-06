@@ -21,7 +21,7 @@ module.exports = function(app) {
     async.waterfall([
       function(cb) {
         if (!length) {
-          claimUntil = new Date(new Date().getTime() + 1000 * 60 * 60);
+          claimUntil = new Date(new Date().getTime() + 1000 * 60 * 30);
           return cb();
         }
 
