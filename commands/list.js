@@ -1,6 +1,7 @@
 var async = require('async');
 var _ = require('underscore');
 var sprintf = require('sprintf-js').sprintf;
+var moment = require('moment-timezone');
 
 var formatTable = require('../lib/formatTable');
 
@@ -58,7 +59,8 @@ module.exports = function(app) {
             if (unclaimed) {
               return;
             }
-            claimedByString = sprintf('Claimed by @%s until %s', resource.username, resource.claim_until);
+            var timeStringPST = moment.tz(resource.claim_until, "America/Los_Angeles").format('Y-M-D h:ma z');
+            claimedByString = sprintf('Claimed by @%s until %s', resource.username, timeStringPST);
           }
           resourceRows.push([ resource.name, claimedByString ]);
         });
