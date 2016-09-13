@@ -2,6 +2,8 @@ var async = require('async');
 var _ = require('underscore');
 var sprintf = require('sprintf-js').sprintf;
 
+var formatTable = require('../lib/formatTable');
+
 module.exports = function(app) {
   app.command('list( unclaimed| available)?( resources?)? ?([a-zA-Z\-]*)?', function(bot, message) {
     var unclaimed = message.match[1];
@@ -49,7 +51,7 @@ module.exports = function(app) {
           return;
         }
 
-        var resourceText = '';
+        var resourceRows = [];
         _.each(resources, function(resource) {
           var claimedByString = '';
           if (resource.claim_until && resource.claim_until > new Date()) {
@@ -58,8 +60,10 @@ module.exports = function(app) {
             }
             claimedByString = sprintf('Claimed by @%s until %s', resource.username, resource.claim_until);
           }
-          resourceText += sprintf('%-15s %20s\n', resource.name, claimedByString);
+          resourceRows.push([ resource.name, claimedByString ]);
         });
+
+        var resourceText = formatTable(resourceRows);
 
         var intro = '';
         if (unclaimed) {
