@@ -86,8 +86,7 @@ var app = {
   async.series([
     ensureResourcesExist,
     function(cb) {
-      bot.startRTM();
-      cb();
+      bot.startRTM(cb);
     }
   ], function(err) {
     if (err) {

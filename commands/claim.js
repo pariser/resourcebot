@@ -1,6 +1,8 @@
 var async = require('async');
 var _ = require('underscore');
 
+var formatter = require('../lib/formatter');
+
 module.exports = function(app) {
 
   app.command('^claim (resource )?([a-zA-Z\-]+)( .+)?', function(bot, message) {
@@ -136,7 +138,7 @@ module.exports = function(app) {
         });
       },
       function(updatedResource, cb) {
-        bot.reply(message, 'Got it! You\'ve claimed ' + updatedResource.name + ' until ' + updatedResource.claim_until, cb);
+        bot.reply(message, 'Got it! You\'ve claimed `' + updatedResource.name + '` until ' + formatter.dateAsPSTString(updatedResource.claim_until), cb);
       }
     ], function(err) {
       if (err && err instanceof ClaimCouldNotParse) {
@@ -166,11 +168,11 @@ module.exports = function(app) {
 
       if (err && err instanceof ResourceAlreadyClaimed) {
         if (message.user === resource.user) {
-          bot.reply(message, 'You already have `' + resourceName + '` claimed until ' + resource.claim_until + '.');
+          bot.reply(message, 'You already have `' + resourceName + '` claimed until ' + formatter.dateAsPSTString(resource.claim_until) + '.');
           return;
         }
 
-        bot.reply(message, 'Sorry - `' + resourceName + '` is currently claimed by @' + resource.username + ' until ' + resource.claim_until + '.');
+        bot.reply(message, 'Sorry - `' + resourceName + '` is currently claimed by @' + resource.username + ' until ' + formatter.dateAsPSTString(resource.claim_until) + '.');
         return;
       }
 
