@@ -1,6 +1,6 @@
 var async = require('async');
 
-var formatTable = require('../lib/formatTable');
+var formatter = require('../lib/formatter');
 
 module.exports = function(app) {
   app.command('help', function(bot, message) {
@@ -9,7 +9,7 @@ module.exports = function(app) {
         bot.startPrivateConversation(message, cb);
       },
       function(convo, cb) {
-        var helpTable = formatTable([
+        var helpTable = formatter.dataTable([
           ['list',                    'List all resources'],
           ['list available',          'List all resources which are currently available'],
           ['add <name>',              'Add a resource with name <name>'],

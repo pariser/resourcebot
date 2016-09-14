@@ -3,7 +3,7 @@ var _ = require('underscore');
 var sprintf = require('sprintf-js').sprintf;
 var moment = require('moment-timezone');
 
-var formatTable = require('../lib/formatTable');
+var formatter = require('../lib/formatter');
 
 module.exports = function(app) {
   app.command('list( unclaimed| available)?( resources?)? ?([a-zA-Z\-]*)?', function(bot, message) {
@@ -59,13 +59,12 @@ module.exports = function(app) {
             if (unclaimed) {
               return;
             }
-            var timeStringPST = moment.tz(resource.claim_until, "America/Los_Angeles").format('Y-M-D h:ma z');
-            claimedByString = sprintf('Claimed by @%s until %s', resource.username, timeStringPST);
+            claimedByString = sprintf('Claimed by @%s until %s', resource.username, formatter.dateAsPSTString(resource.claim_until));
           }
           resourceRows.push([ resource.name, claimedByString ]);
         });
 
-        var resourceText = formatTable(resourceRows);
+        var resourceText = formatter.dataTable(resourceRows);
 
         var intro = '';
         if (unclaimed) {

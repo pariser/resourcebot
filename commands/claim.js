@@ -1,6 +1,7 @@
 var async = require('async');
 var _ = require('underscore');
-var moment = require('moment-timezone');
+
+var formatter = require('../lib/formatter');
 
 module.exports = function(app) {
 
@@ -137,8 +138,7 @@ module.exports = function(app) {
         });
       },
       function(updatedResource, cb) {
-        var timeStringPST = moment.tz(updatedResource.claim_until, "America/Los_Angeles").format('Y-M-D h:ma z');
-        bot.reply(message, 'Got it! You\'ve claimed ' + updatedResource.name + ' until ' + timeStringPST, cb);
+        bot.reply(message, 'Got it! You\'ve claimed `' + updatedResource.name + '` until ' + formatter.dateAsPSTString(updatedResource.claim_until), cb);
       }
     ], function(err) {
       if (err && err instanceof ClaimCouldNotParse) {
@@ -168,13 +168,11 @@ module.exports = function(app) {
 
       if (err && err instanceof ResourceAlreadyClaimed) {
         if (message.user === resource.user) {
-          var timeStringPST = moment.tz(resource.claim_until, "America/Los_Angeles").format('Y-M-D h:ma z');
-          bot.reply(message, 'You already have `' + resourceName + '` claimed until ' + timeStringPST + '.');
+          bot.reply(message, 'You already have `' + resourceName + '` claimed until ' + formatter.dateAsPSTString(resource.claim_until) + '.');
           return;
         }
 
-        var timeStringPST = moment.tz(resource.claim_until, "America/Los_Angeles").format('Y-M-D h:ma z');
-        bot.reply(message, 'Sorry - `' + resourceName + '` is currently claimed by @' + resource.username + ' until ' + timeStringPST + '.');
+        bot.reply(message, 'Sorry - `' + resourceName + '` is currently claimed by @' + resource.username + ' until ' + formatter.dateAsPSTString(resource.claim_until) + '.');
         return;
       }
 
