@@ -2,13 +2,15 @@
 lock '3.4.0'
 
 set :application, 'resourcebot'
-set :repo_url, 'git@github.com:GoLearnUp/resourcebot.git'
+
+# TODO: If you fork this repository, replace the following line with your git url
+set :repo_url, 'git@github.com:pariser/resourcebot.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
+# TODO: update the deploy target directory
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/u/apps/learnup/resourcebot'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -45,11 +47,6 @@ end
 task :install do
   on roles(:app) do
     sudo "apt-get update"
-
-    execute :sudo, "mkdir -p /u"
-    execute :sudo, "chown -R ubuntu:ubuntu /u"
-    execute "mkdir -p /u/apps/learnup/resourcebot"
-
     apt_get "node", "npm"
     execute :sudo, "npm install -g forever"
   end
@@ -68,7 +65,7 @@ namespace :deploy do
     end
   end
 
-  task :restart => :restart_resourcebot
+  task restart: :restart_resourcebot
 end
 
 after :deploy, :restart_resourcebot do

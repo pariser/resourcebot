@@ -1,5 +1,5 @@
 {
-  "name": "learnup-resourcebot",
+  "name": "slack-resourcebot",
   "version": "1.0.0",
   "description": "Slackbot for managing resource use",
   "main": "bot.js",
@@ -30,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/golearnup/resourcebot"
+    "url": "https://github.com/pariser/resourcebot"
   },
   "author": "pariser@gmail.com",
   "license": "MIT"

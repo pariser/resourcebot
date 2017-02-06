@@ -46,7 +46,7 @@ run from a central location, and be used by many teams at the same time.
 1. Clone this repository
 
   ```sh
-  git clone git@github.com:GoLearnUp/resourcebot.git
+  git clone git@github.com:pariser/resourcebot.git
   ```
 
 2. Set up a mongo database for your resourcebot to use.
