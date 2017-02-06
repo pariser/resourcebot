@@ -80,7 +80,6 @@ end
 namespace :resourcebot do
   task :start do
     on roles(:app), except: { no_release: true } do
-      # execute "cd #{current_path} && node_modules/.bin/forever start #{fetch(:main_js_binary)}"
       execute "forever start --uid resourcebot --append --minUptime 1000 --spinSleepTime 1000 --workingDir #{current_path} #{current_path}/#{fetch(:main_js_binary)}"
     end
   end

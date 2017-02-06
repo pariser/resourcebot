@@ -1,7 +1,6 @@
 var async = require('async');
 var _ = require('underscore');
 var sprintf = require('sprintf-js').sprintf;
-var moment = require('moment-timezone');
 
 var formatter = require('../lib/formatter');
 

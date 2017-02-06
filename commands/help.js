@@ -10,15 +10,15 @@ module.exports = function(app) {
       },
       function(convo, cb) {
         var helpTable = formatter.dataTable([
-          ['list',                    'List all resources'],
-          ['list available',          'List all resources which are currently available'],
-          ['add <name>',              'Add a resource with name <name>'],
-          ['remove <name>',           'Remove the resource with name <name>'],
-          ['claim <name> [duration]', 'Claim resource with name <name>'],
-          ['',                        'If [duration] is not applied, defaults to 1 hour.'],
-          ['',                        'Example durations are: "for 1 day", "until tonight"'],
-          ['release <name>',          'Release your claim on resource with name <name>'],
-          ['unclaim <name>',          '']
+          [ 'list', 'List all resources' ],
+          [ 'list available', 'List all resources which are currently available' ],
+          [ 'add <name>', 'Add a resource with name <name>' ],
+          [ 'remove <name>', 'Remove the resource with name <name>' ],
+          [ 'claim <name> [duration]', 'Claim resource with name <name>' ],
+          [ '', 'If [duration] is not applied, defaults to 1 hour.' ],
+          [ '', 'Example durations are: "for 1 day", "until tonight"' ],
+          [ 'release <name>', 'Release your claim on resource with name <name>' ],
+          [ 'unclaim <name>', '' ]
         ]);
 
         var help = '@' + app.slack_username + ' v' + app.version + ':';

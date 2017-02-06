@@ -54,6 +54,7 @@
     "space-in-parens":             [ 2, "never" ],
     # "strict":                      [ 2, "function" ],
     "wrap-iife":                   [ 2, "outside" ],
+    "spaced-comment":              2,
   },
   "env": {
     "node": true
