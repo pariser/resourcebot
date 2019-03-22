@@ -28,7 +28,7 @@ var storage = botkitMongoStorage(mongoConfig);
 var ObjectId = storage.ObjectId;
 
 var controller = botkit.slackbot({
-  debug: false,
+  debug: true,
   storage: storage,
   logger: logger
 });
