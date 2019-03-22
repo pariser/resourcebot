@@ -9,7 +9,8 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75
     mkdir -p /data/db
 
 ADD . /app
-RUN npm install && npm install -g nodemon
+
+RUN npm install 
 
 COPY ./entrypoint.sh /
 
