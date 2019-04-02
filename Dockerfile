@@ -10,7 +10,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75
 
 ADD . /app
 
-RUN npm install 
+RUN npm install && npm install -g forever
 
 COPY ./entrypoint.sh /
 
