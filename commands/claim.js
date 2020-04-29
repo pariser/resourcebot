@@ -27,7 +27,7 @@ module.exports = function(app) {
           return cb();
         }
 
-        var matchFor = length.match(/ for ([0-9\.]+) ((minute|hour|day|week|month|year)s?)/i);
+        var matchFor = length.match(/ for ([0-9\.]+) ((minute|hour|day)s?)/i);
         if (matchFor) {
           var duration = parseFloat(matchFor[1], 10);
           if (_.isNaN(duration)) {
@@ -43,15 +43,6 @@ module.exports = function(app) {
             break;
           case 'day':
             duration *= 1000 * 60 * 60 * 24;
-            break;
-          case 'week':
-            duration *= 1000 * 60 * 60 * 24 * 7;
-            break;
-          case 'month':
-            duration *= 1000 * 60 * 60 * 24 * 7 * 30;
-            break;
-          case 'year':
-            duration *= 1000 * 60 * 60 * 24 * 7 * 365;
             break;
           default:
             return cb(new ClaimCouldNotParse());
@@ -145,7 +136,7 @@ module.exports = function(app) {
         var text = 'I couldn\'t understand your claim request. Try: ```\n';
         text += 'claim <resource> for <duration> <unit(s)>\n';
         text += '  duration: any positive number (decimals allowed)\n';
-        text += '  unit: minute, hour, day, week, month, year\n';
+        text += '  unit: minute, hour, day\n';
         text += '\n';
         text += '- or -\n';
         text += '\n';
