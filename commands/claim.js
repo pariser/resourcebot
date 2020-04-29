@@ -5,7 +5,7 @@ var formatter = require('../lib/formatter');
 
 module.exports = function(app) {
 
-  app.command('^claim (resource )?([a-zA-Z\-]+)( .+)?', function(bot, message) {
+  app.command('^claim (resource )?([a-zA-Z0-9\-]+)( .+)?', function(bot, message) {
     var resourceName = message.match[2];
     var resource;
     var length = message.match[3];
