@@ -25,7 +25,7 @@ module.exports = function(app) {
     };
 
     var respondWithSuccessMessage = function(resource, cb) {
-      bot.reply(message, 'Great, I\'ve added a resource named `' + resourceName + '`', cb);
+      bot.reply(message, 'Okay, I\'ve removed the resource named `' + resourceName + '`', cb);
     };
 
     var onError = function(err) {
