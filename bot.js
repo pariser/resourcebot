@@ -77,14 +77,7 @@ var app = {
     });
   }
 
-  function ensureResourcesExist(cb) {
-    async.each([ 'staging', 'beta', 'demo' ], function(resourceName, next) {
-      ensureResourceExists(resourceName, next);
-    }, cb);
-  }
-
   async.series([
-    ensureResourcesExist,
     function(cb) {
       bot.startRTM(cb);
     }
