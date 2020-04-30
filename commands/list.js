@@ -63,6 +63,8 @@ module.exports = function(app) {
           resourceRows.push([ resource.name, claimedByString ]);
         });
 
+        // alphabetize them
+        resourceRows.sort();
         var resourceText = formatter.dataTable(resourceRows);
 
         var intro = '';
