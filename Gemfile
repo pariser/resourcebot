@@ -1,7 +1,4 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
-
-gem 'capistrano'
-gem 'capistrano-npm'
-
+gem 'capistrano', '~> 3.0'
+gem 'capistrano-npm', '~> 1.0'
