@@ -21,11 +21,8 @@ module.exports = function(app) {
       function(resource, cb) {
         if (!resource) {
           cb(new ResourceDoesNotExistError());
-        } else {
-          cb();
-        }
-      },
-      function(resource, cb) {
+        } 
+      
         console.log(resource);
         console.log("claim_until", resource.claim_until);
         console.log("user", resource.user);
