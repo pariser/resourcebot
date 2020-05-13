@@ -23,7 +23,10 @@ module.exports = function(app) {
 
     var updateResource = function(cb) {
       app.storage.resources.save(resourceName, {
-        status: newStatus 
+        status: newStatus,
+        claim_until: resource.claim_until,
+        user: resource.user,
+        username: resource.username
       }, cb);
     };
 

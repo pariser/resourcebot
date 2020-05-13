@@ -127,7 +127,8 @@ module.exports = function(app) {
           app.storage.resources.save(resourceName, {
             claim_until: claimUntil,
             user: message.user,
-            username: res.user.name
+            username: res.user.name,
+            status: resource.status
           }, cb);
         });
       },
