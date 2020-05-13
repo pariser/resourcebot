@@ -6,7 +6,7 @@ module.exports = function(app) {
     var newStatus = message.match[3];
     var resource;
 
-    var ResourceDoesNotExistError = function() {};
+    function ResourceDoesNotExist() {}
 
     async.waterfall([
       function(cb) {
@@ -20,7 +20,7 @@ module.exports = function(app) {
       },
       function(resource, cb) {
         if (!resource) {
-          cb(new ResourceDoesNotExistError());
+          return cb(new ResourceDoesNotExist());
         } 
       
         console.log(resource);
