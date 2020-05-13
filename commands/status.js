@@ -22,7 +22,7 @@ module.exports = function(app) {
     };
 
     var updateResource = function(resource, cb) {
-      app.storage.resources.update(resourceName, {
+      app.storage.resources.save(resourceName, {
         status: newStatus
       }, cb);
     };
