@@ -17,12 +17,15 @@ module.exports = function(app) {
       if (!resource) {
         cb(new ResourceDoesNotExistError());
       } else {
-        console.log(resource);
         cb();
       }
     };
 
     var updateResource = function(resource, cb) {
+        console.log(resource);
+        console.log("claim_until", resource.claim_until);
+        console.log("user", resource.user);
+        console.log("username", resource.username);
       app.storage.resources.save(resourceName, {
         claim_until: resource.claim_until,
         status: newStatus,
