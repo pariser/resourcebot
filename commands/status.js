@@ -24,10 +24,7 @@ module.exports = function(app) {
         } 
       
         app.storage.resources.save(resourceName, {
-          claim_until: resource.claim_until,
-          status: newStatus,
-          user: resource.user,
-          username: resource.username,
+          status: newStatus
         }, cb);
       },
       function(cb) {

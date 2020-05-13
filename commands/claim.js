@@ -4,7 +4,6 @@ var _ = require('underscore');
 var formatter = require('../lib/formatter');
 
 module.exports = function(app) {
-
   app.command('^claim (resource )?([a-zA-Z0-9\-]+)( .+)?', function(bot, message) {
     var resourceName = message.match[2];
     var resource;
@@ -127,8 +126,7 @@ module.exports = function(app) {
           app.storage.resources.save(resourceName, {
             claim_until: claimUntil,
             user: message.user,
-            username: res.user.name,
-            status: resource.status
+            username: res.user.name
           }, cb);
         });
       },

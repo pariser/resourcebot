@@ -22,8 +22,7 @@ module.exports = function(app) {
 
     var createResource = function(cb) {
       app.storage.resources.save(resourceName, {
-        created_at: new Date(),
-        status: ""
+        created_at: new Date()
       }, cb);
     };
 

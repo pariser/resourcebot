@@ -72,8 +72,7 @@ var app = {
       // Resource doesn't exist. Add it!
       logger.info('Adding resource with name:', resourceName, ', id:', id);
       controller.storage.resources.save(resourceName, {
-        created_at: new Date(),
-        status: ""
+        created_at: new Date()
       }, cb);
     });
   }
