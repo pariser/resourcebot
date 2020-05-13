@@ -18,7 +18,7 @@ module.exports = function(app) {
         resource = _resource;
         cb();
       },
-      function(resource, cb) {
+      function(cb) {
         if (!resource) {
           return cb(new ResourceDoesNotExist());
         } 
@@ -34,7 +34,7 @@ module.exports = function(app) {
           username: resource.username,
         }, cb);
       },
-      function(resource, cb) {
+      function(cb) {
         bot.reply(message, 'Okay, I\'ve updated the status for `' + resourceName + '`', cb);
       }
     ], function(err) {
