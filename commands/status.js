@@ -28,17 +28,17 @@ module.exports = function(app) {
         }, cb);
       },
       function(cb) {
-        bot.reply(message, 'Okay, I\'ve updated the status for `' + resourceName + '`', cb);
+        bot.reply(message, 'Okay, I\'ve updated the status for `' + resourceName + '`');
       }
     ], function(err) {
+      if (err && err instanceof ResourceDoesNotExist) {
+        bot.reply(message, 'Sorry, it looks like there\'s no existing resource called `' + resourceName + '`');
+        return;
+      } 
       if (err) {
-        if (err instanceof ResourceDoesNotExist) {
-          bot.reply(message, 'Sorry, it looks like there\'s no existing resource called `' + resourceName + '`');
-        } else {
-          console.error('Unexpected error:', err);
-          bot.reply(message, 'Unexpected error: ' + err);
-        }
-      }
+        console.error('Unexpected error:', err);
+        return;
+      }   
     });
   });
 };
