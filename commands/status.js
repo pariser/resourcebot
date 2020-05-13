@@ -1,7 +1,7 @@
 var async = require('async');
 
 module.exports = function(app) {
-  app.command('status( resource)? ([A-Za-z0-9\-]+) ([A-Za-z0-9\s]+)$', function(bot, message) {
+  app.command('^status( resource)? ([A-Za-z0-9\-]+) ([A-Za-z0-9\s]+)$', function(bot, message) {
     var resourceName = message.match[2];
     var newStatus = message.match[3];
 
