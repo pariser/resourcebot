@@ -23,10 +23,6 @@ module.exports = function(app) {
           return cb(new ResourceDoesNotExist());
         } 
       
-        console.log(resource);
-        console.log("claim_until", resource.claim_until);
-        console.log("user", resource.user);
-        console.log("username", resource.username);
         app.storage.resources.save(resourceName, {
           claim_until: resource.claim_until,
           status: newStatus,
@@ -39,7 +35,7 @@ module.exports = function(app) {
       }
     ], function(err) {
       if (err) {
-        if (err instanceof ResourceDoesNotExistError) {
+        if (err instanceof ResourceDoesNotExist) {
           bot.reply(message, 'Sorry, it looks like there\'s no existing resource called `' + resourceName + '`');
         } else {
           console.error('Unexpected error:', err);
