@@ -17,11 +17,12 @@ module.exports = function(app) {
       if (!resource) {
         cb(new ResourceDoesNotExistError());
       } else {
+        console.log(resource);
         cb();
       }
     };
 
-    var updateResource = function(resource, cb) {
+    var updateResource = function(cb) {
       app.storage.resources.save(resourceName, {
         status: newStatus
       }, cb);

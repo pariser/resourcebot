@@ -112,6 +112,8 @@ module.exports = function(app) {
           return cb(new ResourceDoesNotExist());
         }
 
+        console.log(resource);
+
         // we want to support reclaiming, so we want to do this, but ONLY if it's
         // claimed by someone who isn't asking for a new claim
         if (resource.claim_until > now && resource.user != message.user) {
