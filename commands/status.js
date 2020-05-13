@@ -21,7 +21,7 @@ module.exports = function(app) {
       }
     };
 
-    var updateResource = function(cb) {
+    var updateResource = function(resource, cb) {
       app.storage.resources.save(resourceName, {
         status: newStatus,
         claim_until: resource.claim_until,
