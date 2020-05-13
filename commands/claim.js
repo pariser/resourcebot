@@ -112,9 +112,12 @@ module.exports = function(app) {
           return cb(new ResourceDoesNotExist());
         }
 
-        if (resource.claim_until > now) {
+        // we want to support reclaiming, so we want to do this, but ONLY if it's
+        // claimed by someone who isn't asking for a new claim
+        if (resource.claim_until > now && resource.user != message.user) {
           return cb(new ResourceAlreadyClaimed());
         }
+        // otherwise, just add a new claim for the requesting user with a duration starting at "now"
 
         app.api.users.info({ user: message.user }, function(err, res) {
           if (err) {
