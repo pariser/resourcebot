@@ -21,6 +21,7 @@ claim <name> [duration]   Claim resource with name <name>
 
 release <name>            Release your claim on resource with name <name>
 unclaim <name>            Release your claim on resource with name <name>
+status <name> <status>    Sets the status of resource <name> to <status>
 ```
 
 ## A quick thanks to Botkit!

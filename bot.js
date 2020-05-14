@@ -96,6 +96,7 @@ require('./commands/add')(app);
 require('./commands/remove')(app);
 require('./commands/claim')(app);
 require('./commands/release')(app);
+require('./commands/status')(app);
 
 // Exit handling
 var exitHandler = function(options, err) {

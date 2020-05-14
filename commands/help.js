@@ -18,7 +18,8 @@ module.exports = function(app) {
           [ '', 'If [duration] is not applied, defaults to 1 hour.' ],
           [ '', 'Example durations are: "for 1 day", "until tonight"' ],
           [ 'release <name>', 'Release your claim on resource with name <name>' ],
-          [ 'unclaim <name>', '' ]
+          [ 'unclaim <name>', '' ],
+          ['status <name> <status>', 'Sets the status of <name> to <status>']
         ]);
 
         var help = '@' + app.slack_username + ' v' + app.version + ':';
