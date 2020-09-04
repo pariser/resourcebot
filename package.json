@@ -11,7 +11,7 @@
     "express": "^4.13.4",
     "jfs": "^0.2.6",
     "moment-timezone": "^0.5.5",
-    "mongodb": "^2.1",
+    "mongodb": "^3.6",
     "monkii": "^1.2.0",
     "mustache": "^2.2.1",
     "request": "^2.69.0",
