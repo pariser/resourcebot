@@ -59,12 +59,15 @@ module.exports = function(app) {
               return;
             }
             claimedByString = sprintf('Claimed by @%s until %s', resource.username, formatter.dateAsPSTString(resource.claim_until));
+            var remainTime = resource.claim_until - new Date();
+            var remainTimeString = "[remain " + remainTime.getHours().toString() +":" + remainTime.getMinutes().toString() +"]";
           }
           var statusString = "";
           if (resource.status) {
             statusString = "[" + resource.status + "]";
           }
-          resourceRows.push([ resource.name, statusString, claimedByString ]);
+
+          resourceRows.push([ resource.name, statusString, claimedByString, remainTimeString]);
         });
 
         // alphabetize them
