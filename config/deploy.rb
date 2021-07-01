@@ -4,7 +4,7 @@ lock '3.4.1'
 set :application, 'resourcebot'
 
 # TODO: If you fork this repository, replace the following line with your git url
-set :repo_url, 'git@github.com:arubin18/resourcebot.git'
+set :repo_url, 'https://github.com/pariser/resourcebot.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
