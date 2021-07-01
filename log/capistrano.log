@@ -1,0 +1,6 @@
+# Logfile created on 2021-07-01 12:55:34 -0400 by logger.rb/66358
+  INFO ---------------------------------------------------------------------------
+  INFO START 2021-07-01 12:55:34 -0400 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [46131eab] Running /usr/bin/env mkdir -p /tmp as ubuntu@54.204.9.161
+ DEBUG [46131eab] Command: /usr/bin/env mkdir -p /tmp

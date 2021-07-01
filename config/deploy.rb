@@ -1,10 +1,10 @@
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.16.0'
 
 set :application, 'resourcebot'
 
 # TODO: If you fork this repository, replace the following line with your git url
-set :repo_url, 'git@github.com:pariser/resourcebot.git'
+set :repo_url, 'git@github.com:arubin18/resourcebot.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
