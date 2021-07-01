@@ -4,3 +4,8 @@
   INFO ---------------------------------------------------------------------------
   INFO [46131eab] Running /usr/bin/env mkdir -p /tmp as ubuntu@54.204.9.161
  DEBUG [46131eab] Command: /usr/bin/env mkdir -p /tmp
+  INFO ---------------------------------------------------------------------------
+  INFO START 2021-07-01 13:04:53 -0400 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [bc5f9bdc] Running /usr/bin/env mkdir -p /tmp as ubuntu@54.204.9.161
+ DEBUG [bc5f9bdc] Command: /usr/bin/env mkdir -p /tmp
