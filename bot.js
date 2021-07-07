@@ -78,7 +78,7 @@ var app = {
   }
 
   function ensureResourcesExist(cb) {
-    async.each([ 'staging', 'beta', 'demo' ], function(resourceName, next) {
+    async.each([ 'das-testing', 'pingo-test', 'trex-test' ], function(resourceName, next) {
       ensureResourceExists(resourceName, next);
     }, cb);
   }
