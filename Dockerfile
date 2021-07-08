@@ -11,4 +11,4 @@ RUN npm install --production
 
 COPY . .
 
-CMD [ "forever", "bot.js" ]
+CMD [ "node", "bot.js" ]
