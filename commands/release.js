@@ -54,7 +54,7 @@ module.exports = function(app) {
           var otherUserName = 'another user';
 
           if (!apiErr) {
-            otherUserName = '@' + res.user.name;
+            otherUserName = '@' + res.user.real_name;
           }
 
           bot.reply(message, 'You do not have a claim on `' + resourceName + '`. This resource is claimed by ' + otherUserName + '.');

@@ -133,7 +133,7 @@ module.exports = function(app) {
           app.storage.resources.save(resourceName, {
             claim_until: claimUntil,
             user: message.user,
-            username: res.user.name
+            username: res.user.real_name
           }, cb);
         });
       },
@@ -172,7 +172,7 @@ module.exports = function(app) {
           return;
         }
 
-        bot.reply(message, 'Sorry - `' + resourceName + '` is currently claimed by @' + resource.username + ' until ' + formatter.dateAsPSTString(resource.claim_until) + '.');
+        bot.reply(message, 'Sorry - `' + resourceName + '` is currently claimed by ' + resource.username + ' until ' + formatter.dateAsPSTString(resource.claim_until) + '.');
         return;
       }
 
