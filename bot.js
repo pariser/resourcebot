@@ -1,3 +1,5 @@
+// {"log":"{\"name\":\"resourcebot\",\"hostname\":\"1b169c84cf28\",\"pid\":57,\"level\":30,\"msg\":\"No handler for  rtm_close\",\"time\":\"2021-08-18T02:43:35.191Z\",\"v\":0}\n","stream":"stdout","time":"2021-08-18T02:43:35.191524379Z"}
+
 require('dotenv').load();
 
 var async = require('async');
@@ -25,7 +27,6 @@ var slackConfig = {
 };
 
 var storage = botkitMongoStorage(mongoConfig);
-var ObjectId = storage.ObjectId;
 
 var controller = botkit.slackbot({
   debug: true,
@@ -55,36 +56,7 @@ var app = {
 (function bootApp() {
   'use strict';
 
-  function ensureResourceExists(resourceName, cb) {
-    controller.storage.resources.findOne({
-      name: resourceName
-    }, function(err, resource) {
-      if (err) { // Error? Bail!
-        return cb(err);
-      }
-
-      if (resource) { // Resource already exists? Nothing to do here.
-        logger.info('Found resource with name:', resourceName);
-        return cb();
-      }
-
-      var id = new ObjectId();
-      // Resource doesn't exist. Add it!
-      logger.info('Adding resource with name:', resourceName, ', id:', id);
-      controller.storage.resources.save(resourceName, {
-        created_at: new Date()
-      }, cb);
-    });
-  }
-
-  function ensureResourcesExist(cb) {
-    async.each([ 'staging', 'beta', 'demo' ], function(resourceName, next) {
-      ensureResourceExists(resourceName, next);
-    }, cb);
-  }
-
   async.series([
-    ensureResourcesExist,
     function(cb) {
       bot.startRTM(cb);
     }
