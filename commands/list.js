@@ -58,7 +58,7 @@ module.exports = function(app) {
             if (unclaimed) {
               return;
             }
-            claimedByString = sprintf('Claimed by @%s until %s', resource.username, formatter.dateAsPSTString(resource.claim_until));
+            claimedByString = sprintf('Claimed by @%s until %s', resource.username, formatter.dateAsESTString(resource.claim_until));
           }
           resourceRows.push([ resource.name, claimedByString ]);
         });
