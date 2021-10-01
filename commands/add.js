@@ -1,7 +1,8 @@
 var async = require('async');
 
 module.exports = function(app) {
-  app.command('add( resource)? ([^\\s]+)', function(bot, message) {
+  app.command('add ([\w\-]+) ([^\\s]+)', function(bot, message) {
+    var resourceType = message.match[1];
     var resourceName = message.match[2];
 
     var ResourceAlreadyExistsError = function() {};
@@ -22,7 +23,8 @@ module.exports = function(app) {
 
     var createResource = function(cb) {
       app.storage.resources.save(resourceName, {
-        created_at: new Date()
+        created_at: new Date(),
+        type: resourceType
       }, cb);
     };
 
