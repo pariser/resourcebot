@@ -60,7 +60,7 @@ module.exports = function(app) {
             }
             claimedByString = sprintf('Claimed by %s until %s', resource.username, formatter.dateAsPSTString(resource.claim_until));
           }
-          resourceRows.push([ resource.type, resource.name, claimedByString ]);
+          resourceRows.push([ resource.type || '<none>', resource.name, claimedByString ]);
         });
 
         var resourceText = formatter.dataTable(resourceRows);
