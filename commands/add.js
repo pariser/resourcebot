@@ -1,7 +1,7 @@
 var async = require('async');
 
 module.exports = function(app) {
-  app.command('add ([\w\-]+) ([^\\s]+)', function(bot, message) {
+  app.command('add ([^\\s]+) ([^\\s]+)', function(bot, message) {
     var resourceType = message.match[1];
     var resourceName = message.match[2];
 
