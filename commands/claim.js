@@ -133,7 +133,8 @@ module.exports = function(app) {
           app.storage.resources.save(resourceName, {
             claim_until: claimUntil,
             user: message.user,
-            username: res.user.real_name
+            username: res.user.real_name,
+            type: resource.type
           }, cb);
         });
       },
