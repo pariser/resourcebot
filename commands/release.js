@@ -32,7 +32,8 @@ module.exports = function(app) {
 
         app.storage.resources.save(resourceName, {
           claim_until: null,
-          user: null
+          user: null,
+          type: resource.type
         }, cb);
       },
       function(updatedResource, cb) {

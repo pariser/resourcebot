@@ -1,4 +1,7 @@
+require('dotenv').load();
+
 var botkit = require('./lib/Botkit');
+var botkitMongoStorage = require("./lib/storage/mongo_storage.js");
 var logger = console;
 
 var SLACK_USERNAME = process.env.BOT_NAME || 'resourcebot';
@@ -19,20 +22,34 @@ var slackConfig = {
     token: process.env.SLACK_TOKEN
 };
 
+var storage = botkitMongoStorage(mongoConfig);
 var controller = botkit.slackbot({
     debug: true,
+    storage: storage,
     logger: logger
 });
 
 var bot = controller.spawn(slackConfig);
+var api = {
+    users: {
+        info: (opts, cb) => cb(null, {
+            user: {
+                realname: 'FH',
+            }
+        })
+    }
+}
+
 var app = {
     version: PACKAGE_VERSION,
     LISTEN_ON: LISTEN_ON,
     slack_username: SLACK_USERNAME,
     mongo_config: mongoConfig,
     slack_config: slackConfig,
+    storage: storage,
     controller: controller,
     bot: bot,
+    api: api,
     command: function(commandDescription, func) {
         'use strict';
         return this.controller.hears(commandDescription, LISTEN_ON, func);

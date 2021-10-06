@@ -13,3 +13,4 @@ config/deploy/production.env
 *.tmproj
 .ruby-version
 Gemfile.lock
+.idea
