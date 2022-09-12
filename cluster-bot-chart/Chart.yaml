@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cluster-bot
+description: ClusterBot for Slack https://github.com/FareHarbor/resourcebot
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

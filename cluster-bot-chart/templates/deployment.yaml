@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "resourcebot.fullname" . }}
+  labels:
+    {{- include "resourcebot.labels" . | nindent 4 }}
+    app.kubernetes.io/component: application
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "resourcebot.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: application
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "resourcebot.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: application
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "resourcebot.serviceAccountName" . }}
+      containers:
+        - name: resourcebot
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: WIRED_TIGER_CACHE_SIZE_GB
+              value: "{{ .Values.cache_size_gb }}"
+            - name: SLACK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.slack_token_secret.name }}
+                  key: {{ .Values.slack_token_secret.key }}
+                  optional: false
+          volumeMounts:
+          - name: efs-storage
+            mountPath: /data
+      volumes:
+      - name: efs-storage
+        persistentVolumeClaim:
+          claimName: "{{ include "resourcebot.fullname" . }}-efs-claim"

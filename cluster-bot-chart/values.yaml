@@ -1,0 +1,29 @@
+image:
+  repository: 996938751812.dkr.ecr.us-west-1.amazonaws.com/cluster-bot
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: [ ]
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: { }
+  name: ""
+
+podAnnotations:
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 600Mi
+  requests:
+    cpu: 100m
+    memory: 600Mi
+
+cache_size_gb: "0.2"
+slack_token_secret:
+  name: ""
+  key: ""
+volumeHandle: ""
